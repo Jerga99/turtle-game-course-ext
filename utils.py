@@ -1,4 +1,6 @@
-from turtle import Vec2D
+
+from turtle import Vec2D, window_height, window_width
+from random import randint
 from player import Player
 
 def handle_movement(*keys, player: Player):
@@ -18,3 +20,15 @@ def handle_movement(*keys, player: Player):
     last_two = directions[-2:]
     direction = last_two[0] + last_two[1]
     player.set_direction(direction)
+
+
+
+def random_screen_pos():
+
+    width = round(window_width() / 2)
+    height = round(window_height() / 2)
+
+    x = randint(-width, width)
+    y = randint(-height, height)
+
+    return Vec2D(x, y)

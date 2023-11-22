@@ -5,8 +5,15 @@ from ui import UI
 from window import Window
 from game_time import GameTime
 from watched_key import WatchedKey
-from utils import handle_movement
+from group import Group
+from utils import handle_movement, random_screen_pos
 import globals as g
+
+def spawn_enemies(enemies: Group, player: Player):
+    for _ in range(g.ENEMY_SPAWN_COUNT):
+        enemy = Enemy(random_screen_pos(), target=player)
+        enemies.append(enemy)
+
 
 def restart_game(*entities):
     for e in entities:
@@ -19,11 +26,14 @@ def quit_game(*_):
 def start_game():
     window = Window()
     player = Player()
-    enemy = Enemy(target=player)
+    enemies = Group[Enemy]()
+
     ui = UI(
-        restart_callback=lambda *_: restart_game(player, enemy, ui),
+        restart_callback=lambda *_: restart_game(player, enemies, ui),
         quit_callback=quit_game
     )
+
+    spawn_timer = 0
 
     w = WatchedKey('w')
     a = WatchedKey('a')
@@ -31,14 +41,21 @@ def start_game():
     d = WatchedKey('d')
 
     def update_loop():
+        nonlocal spawn_timer
         GameTime.process_time()
 
         if g.GAME_OVER:
             ui.show_gameover()
         else:
+            spawn_timer += GameTime.delta_time
+
+            if spawn_timer >= g.ENEMY_SPAWN_INTERVAL:
+                spawn_timer = 0
+                spawn_enemies(enemies, player)
+
             handle_movement(w,a,s,d, player=player)
             player.update()
-            enemy.update()
+            enemies.update()
 
         window.screen.update()
         window.screen.ontimer(update_loop, g.FRAME_TIME_MS)
