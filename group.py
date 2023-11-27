@@ -1,11 +1,18 @@
 
+from typing import TypeVar
 from game_entity import GameEntity
 
-class Group(list[GameEntity]):
+T = TypeVar('T', bound=GameEntity)
+
+class Group(list[T]):
 
     def update(self):
-        for entity in self:
-            entity.update()
+        for i, entity in enumerate(self):
+            if entity.active:
+                entity.update()
+            else:
+                entity.hideturtle()
+                self.pop(i)
 
     def restart(self):
         for entity in self:

@@ -1,4 +1,5 @@
 
+from turtle import onkeypress
 from player import Player
 from enemy import Enemy
 from ui import UI
@@ -39,6 +40,7 @@ def start_game():
     a = WatchedKey('a')
     s = WatchedKey('s')
     d = WatchedKey('d')
+    onkeypress(player.spawn_projectile, 'space')
 
     def update_loop():
         nonlocal spawn_timer

@@ -3,3 +3,6 @@
 1. Spawn enemy at random position in the map
 2. Spawn multiple Enemies
 3. Create custom "list" for enemies
+
+--- 2 - Projectiles ---
+1. spawn projectiles by player

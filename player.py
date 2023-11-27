@@ -3,6 +3,8 @@ import math
 from turtle import Vec2D
 from game_entity import GameEntity
 from game_time import GameTime
+from projectile import Projectile
+from group import Group
 import globals as g
 
 def magnitude(vector: Vec2D):
@@ -20,7 +22,12 @@ class Player(GameEntity):
         self.color('#3ff6ff')
         self.shape('turtle')
         self.direction = Vec2D(0,0)
+        self.projectiles = Group[Projectile]()
         self.movement_speed = 200 # pixels per second
+
+    def spawn_projectile(self):
+        projectile = Projectile(self.pos(), self.direction)
+        self.projectiles.append(projectile)
 
     def set_direction(self, direction: Vec2D):
         self.direction = direction
@@ -29,6 +36,7 @@ class Player(GameEntity):
         g.GAME_OVER = True
 
     def restart(self):
+        self.projectiles.restart()
         self.home()
 
     def move(self):
@@ -57,4 +65,5 @@ class Player(GameEntity):
 
     def update(self):
         self.move()
+        self.projectiles.update()
 

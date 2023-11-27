@@ -8,6 +8,7 @@ class GameEntity(Turtle):
         self.speed(0)
         self.penup()
         self.movement_speed = 150
+        self.active = True
 
     def take_damage(self):
         pass
