@@ -10,6 +10,7 @@ class Enemy(GameEntity):
         super().__init__()
         self.target = target
         self.setpos(pos)
+        self.movement_speed = 100
         self.timer = 0
         self.jump_interval = 3
 

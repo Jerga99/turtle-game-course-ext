@@ -17,12 +17,12 @@ def normalize(vector: Vec2D, mag: float):
     return vector
 
 class Player(GameEntity):
-    def __init__(self) -> None:
+    def __init__(self, projectiles: Group[Projectile]) -> None:
         super().__init__()
         self.color('#3ff6ff')
         self.shape('turtle')
         self.direction = Vec2D(0,0)
-        self.projectiles = Group[Projectile]()
+        self.projectiles = projectiles
         self.movement_speed = 200 # pixels per second
 
     def spawn_projectile(self):
@@ -54,7 +54,7 @@ class Player(GameEntity):
         angle_difference = target_angle - current_angle
         angle_difference = (angle_difference + 180) % 360 - 180
 
-        turn_step = 360 * GameTime.delta_time
+        turn_step = 500 * GameTime.delta_time
         real_step = min(turn_step, abs(angle_difference))
 
         if angle_difference != 0:

@@ -1,6 +1,7 @@
 
 from turtle import onkeypress
 from player import Player
+from projectile import Projectile
 from enemy import Enemy
 from ui import UI
 from window import Window
@@ -26,8 +27,9 @@ def quit_game(*_):
 
 def start_game():
     window = Window()
-    player = Player()
-    enemies = Group[Enemy]()
+    enemies = Group[Enemy](collision_group=None)
+    projectiles = Group[Projectile](collision_group=enemies)
+    player = Player(projectiles)
 
     ui = UI(
         restart_callback=lambda *_: restart_game(player, enemies, ui),
