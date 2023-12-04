@@ -1,5 +1,5 @@
 
-from turtle import onkeypress
+from turtle import onkeypress, getcanvas
 from player import Player
 from projectile import Projectile
 from enemy import Enemy
@@ -43,6 +43,7 @@ def start_game():
     s = WatchedKey('s')
     d = WatchedKey('d')
     onkeypress(player.spawn_projectile, 'space')
+    getcanvas().bind('<Motion>', player.on_mouse_movement)
 
     def update_loop():
         nonlocal spawn_timer

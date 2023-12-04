@@ -1,6 +1,7 @@
 
 import math
-from turtle import Vec2D
+from tkinter import Event
+from turtle import Vec2D, window_height, window_width
 from game_entity import GameEntity
 from game_time import GameTime
 from projectile import Projectile
@@ -24,9 +25,15 @@ class Player(GameEntity):
         self.direction = Vec2D(0,0)
         self.projectiles = projectiles
         self.movement_speed = 200 # pixels per second
+        self.mouse_pos = Vec2D(0,0)
+
+    def on_mouse_movement(self, event: Event):
+        x = event.x - window_width() / 2
+        y = window_height() / 2 - event.y
+        self.mouse_pos = Vec2D(x,y)
 
     def spawn_projectile(self):
-        projectile = Projectile(self.pos(), self.direction)
+        projectile = Projectile(self.pos(), self.mouse_pos)
         self.projectiles.append(projectile)
 
     def set_direction(self, direction: Vec2D):
@@ -48,18 +55,8 @@ class Player(GameEntity):
         normalized_dir = normalize(self.direction, mag)
         movement = normalized_dir * (self.movement_speed * GameTime.delta_time)
 
-        target_angle = self.towards(self.pos() + normalized_dir)
-        current_angle = self.heading()
-
-        angle_difference = target_angle - current_angle
-        angle_difference = (angle_difference + 180) % 360 - 180
-
-        turn_step = 500 * GameTime.delta_time
-        real_step = min(turn_step, abs(angle_difference))
-
-        if angle_difference != 0:
-            new_heading = current_angle + real_step * (1 if angle_difference > 0 else -1)
-            self.setheading(new_heading)
+        target_angle = self.towards(self.mouse_pos)
+        self.setheading(target_angle)
 
         self.setpos(position + movement)
 

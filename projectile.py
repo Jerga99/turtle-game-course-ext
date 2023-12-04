@@ -9,7 +9,7 @@ class Projectile(GameEntity):
         self.shape('square')
         self.color('blue')
         self.setpos(pos)
-        self.setheading(self.towards(pos + direction))
+        self.setheading(self.towards(direction))
         self.movement_speed = 300
         self.max_life_time = 0.5
         self.current_life_time = 0
